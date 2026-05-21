@@ -1,0 +1,25 @@
+Location,Month,MaxTemp,PrevMonthMax,MeanTemp,PrevMonthMean,MinTemp,PrevMonthMin
+Archerfield,June 2026,22.2,22.5,16.0,16.2,9.9,9.9
+Archerfield,July 2026,22.2,22.3,15.3,15.4,8.3,8.3
+Archerfield,August 2026,23.9,24.0,16.3,16.5,8.7,9.0
+Archerfield,September 2026,26.6,26.9,19.4,19.6,12.3,12.3
+Archerfield,October 2026,28.4,28.8,21.7,22.0,15.4,15.6
+Archerfield,November 2026,29.9,,24.1,,18.6,
+Bankstown,June 2026,18.5,18.7,12.9,12.9,7.3,7.2
+Bankstown,July 2026,18.3,18.2,12.1,12.0,5.9,5.8
+Bankstown,August 2026,20.3,20.4,13.5,13.5,6.7,6.7
+Bankstown,September 2026,23.3,23.0,16.5,16.3,9.7,9.6
+Bankstown,October 2026,25.7,25.9,19.1,19.2,12.7,12.7
+Bankstown,November 2026,26.8,,21.1,,15.6,
+Melbourne,June 2026,14.5,14.7,11.3,11.6,8.2,8.4
+Melbourne,July 2026,14.3,14.3,11.1,10.9,7.8,7.6
+Melbourne,August 2026,15.6,15.8,12.0,12.1,8.4,8.3
+Melbourne,September 2026,18.0,17.8,13.9,13.8,9.7,9.7
+Melbourne,October 2026,20.4,20.6,15.7,15.7,11.0,11.0
+Melbourne,November 2026,22.6,,17.6,,12.8,
+Adelaide,June 2026,16.2,16.6,12.7,13.0,9.2,9.5
+Adelaide,July 2026,15.7,15.7,12.2,12.1,8.7,8.6
+Adelaide,August 2026,17.0,17.3,13.0,13.2,9.0,9.1
+Adelaide,September 2026,19.5,19.6,15.0,15.1,10.5,10.7
+Adelaide,October 2026,22.5,22.7,17.2,17.3,11.9,12.0
+Adelaide,November 2026,25.5,,19.8,,14.1,
