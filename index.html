@@ -5,22 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AUS Temperature Climatology Tool — MetraWeather</title>
 <style>
-  /* ── Tokens ──────────────────────────────────────────────────────────── */
   :root {
-    --navy:    #0a1628;
-    --navy2:   #0f2040;
-    --navy3:   #162b52;
-    --cyan:    #00aeef;
-    --cyan2:   #0090cc;
-    --white:   #f0f4f8;
-    --muted:   #7a9bb5;
-    --border:  rgba(0,174,239,0.18);
-    --card:    rgba(15,32,64,0.85);
-
-    --tmax:  #ef5350;
-    --tmean: #00aeef;
-    --tmin:  #42a5f5;
-
+    --navy:   #0a1628;
+    --navy2:  #0f2040;
+    --navy3:  #162b52;
+    --cyan:   #00aeef;
+    --white:  #f0f4f8;
+    --muted:  #7a9bb5;
+    --border: rgba(0,174,239,0.18);
+    --card:   rgba(15,32,64,0.85);
+    --tmax:   #ef5350;
+    --tmean:  #00aeef;
+    --tmin:   #42a5f5;
     --font-head: 'DM Mono', 'Courier New', monospace;
     --font-body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
   }
@@ -38,7 +34,6 @@
       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,174,239,0.04) 39px, rgba(0,174,239,0.04) 40px);
   }
 
-  /* ── Layout ──────────────────────────────────────────────────────────── */
   header {
     display: flex;
     align-items: center;
@@ -60,48 +55,23 @@
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-head);
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: var(--navy);
-    flex-shrink: 0;
+    font-size: 0.65rem; font-weight: 700;
+    color: var(--navy); flex-shrink: 0;
   }
 
-  .header-title {
-    font-family: var(--font-head);
-    font-size: 0.85rem;
-    letter-spacing: 0.12em;
-    color: var(--white);
-    text-transform: uppercase;
-  }
+  .header-title { font-family: var(--font-head); font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .header-sub   { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; }
+  .badge        { font-family: var(--font-head); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); border: 1px solid var(--border); padding: 0.25rem 0.65rem; border-radius: 2px; }
 
-  .header-sub {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-top: 1px;
-  }
+  main { max-width: 960px; margin: 0 auto; padding: 2rem; }
 
-  .badge {
-    font-family: var(--font-head);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--cyan);
-    border: 1px solid var(--border);
-    padding: 0.25rem 0.65rem;
-    border-radius: 2px;
-  }
-
-  main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-
-  /* ── Controls panel ──────────────────────────────────────────────────── */
+  /* ── Controls ── */
   .controls-panel {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     backdrop-filter: blur(6px);
   }
 
@@ -122,202 +92,139 @@
     margin-bottom: 0.6rem;
   }
 
-  /* ── Dual range slider ───────────────────────────────────────────────── */
-  .range-wrap {
-    position: relative;
-    height: 44px;
-    margin-top: 0.3rem;
-  }
+  /* ── Dual range slider ── */
+  .range-wrap { position: relative; height: 44px; margin-top: 0.3rem; }
 
   .range-wrap input[type=range] {
     -webkit-appearance: none;
     position: absolute;
-    width: 100%;
-    height: 4px;
+    width: 100%; height: 4px;
     top: 20px;
     background: transparent;
     pointer-events: none;
     outline: none;
   }
 
-  .range-track {
-    position: absolute;
-    width: 100%;
-    height: 4px;
-    top: 20px;
-    background: var(--navy3);
-    border-radius: 2px;
-  }
-
-  .range-fill {
-    position: absolute;
-    height: 4px;
-    top: 20px;
-    background: var(--cyan);
-    border-radius: 2px;
-    pointer-events: none;
-  }
+  .range-track { position: absolute; width: 100%; height: 4px; top: 20px; background: var(--navy3); border-radius: 2px; }
+  .range-fill  { position: absolute; height: 4px; top: 20px; background: var(--cyan); border-radius: 2px; pointer-events: none; }
 
   .range-wrap input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: var(--cyan);
-    border: 3px solid var(--navy);
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--cyan); border: 3px solid var(--navy);
     box-shadow: 0 0 0 1px var(--cyan);
-    cursor: pointer;
-    pointer-events: all;
-    position: relative;
-    z-index: 2;
+    cursor: pointer; pointer-events: all;
   }
 
   .range-wrap input[type=range]::-moz-range-thumb {
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: var(--cyan);
-    border: 3px solid var(--navy);
-    cursor: pointer;
-    pointer-events: all;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--cyan); border: 3px solid var(--navy);
+    cursor: pointer; pointer-events: all;
   }
 
-  .range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--font-head);
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 0.3rem;
-    padding-top: 28px;
-  }
+  .range-labels { display: flex; justify-content: space-between; font-family: var(--font-head); font-size: 0.7rem; color: var(--muted); padding-top: 28px; }
+  .range-value  { font-family: var(--font-head); font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em; }
 
-  .range-value {
-    font-family: var(--font-head);
-    font-size: 1rem;
-    color: var(--cyan);
-    letter-spacing: 0.05em;
-  }
-
-  /* ── Variable toggle ─────────────────────────────────────────────────── */
-  .var-toggle {
-    display: flex;
-    gap: 0.4rem;
-    margin-top: 0.3rem;
-  }
+  /* ── Variable toggle ── */
+  .var-toggle { display: flex; gap: 0.4rem; margin-top: 0.3rem; }
 
   .var-btn {
-    font-family: var(--font-head);
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.4rem 1rem;
-    border-radius: 3px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
+    font-family: var(--font-head); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.4rem 1rem; border-radius: 3px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s;
   }
-
   .var-btn:hover { border-color: var(--cyan); color: var(--white); }
-
-  .var-btn.active[data-var=tmax] { background: rgba(239,83,80,0.2); border-color: var(--tmax); color: var(--tmax); }
-  .var-btn.active[data-var=tmean] { background: rgba(0,174,239,0.2); border-color: var(--tmean); color: var(--tmean); }
-  .var-btn.active[data-var=tmin] { background: rgba(66,165,245,0.2); border-color: var(--tmin); color: var(--tmin); }
+  .var-btn.active[data-var=tmax]  { background: rgba(239,83,80,0.2);  border-color: var(--tmax);  color: var(--tmax);  }
+  .var-btn.active[data-var=tmean] { background: rgba(0,174,239,0.2);  border-color: var(--tmean); color: var(--tmean); }
+  .var-btn.active[data-var=tmin]  { background: rgba(66,165,245,0.2); border-color: var(--tmin);  color: var(--tmin);  }
 
   .prev-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.72rem;
-    color: var(--muted);
-    cursor: pointer;
-    margin-top: 0.8rem;
-    user-select: none;
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; color: var(--muted); cursor: pointer; margin-top: 0.8rem; user-select: none;
   }
-
   .prev-toggle input { accent-color: var(--cyan); cursor: pointer; }
   .prev-toggle:hover { color: var(--white); }
 
-  /* ── Stats strip ─────────────────────────────────────────────────────── */
-  .stats-strip {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 2rem;
+  /* ── City tabs ── */
+  .city-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
-  .stat-cell {
+  .city-tab {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.4rem;
+    border-radius: 3px;
+    border: 1px solid var(--border);
     background: var(--card);
-    padding: 0.9rem 1.2rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex: 1;
     text-align: center;
   }
+  .city-tab:hover { border-color: var(--cyan); color: var(--white); }
+  .city-tab.active { background: rgba(0,174,239,0.15); border-color: var(--cyan); color: var(--cyan); }
 
-  .stat-city {
-    font-family: var(--font-head);
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
-  }
-
-  .stat-value {
-    font-family: var(--font-head);
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .stat-anom {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-top: 0.2rem;
-  }
-
-  .pos { color: var(--tmax); }
-  .neg { color: var(--tmin); }
-  .neu { color: var(--muted); }
-
-  /* ── Chart grid ──────────────────────────────────────────────────────── */
-  .chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
+  /* ── Chart card ── */
   .chart-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 1.2rem 1.4rem 1rem;
+    padding: 1.4rem 1.8rem 1.2rem;
     backdrop-filter: blur(4px);
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .chart-title {
     font-family: var(--font-head);
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--cyan);
-    margin-bottom: 0.8rem;
   }
 
-  .chart-subtitle {
-    font-size: 0.68rem;
+  .chart-subtitle { font-size: 0.68rem; color: var(--muted); }
+
+  /* ── Legend (inside card) ── */
+  .legend {
+    display: flex;
+    gap: 1.4rem;
+    font-size: 0.66rem;
     color: var(--muted);
-    margin-top: -0.5rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
-  svg.box-chart { width: 100%; overflow: visible; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-box  { width: 14px; height: 10px; border-radius: 2px; }
+  .legend-dot  { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-line { width: 20px; height: 2px; }
+  .legend-diamond {
+    width: 9px; height: 9px;
+    transform: rotate(45deg);
+    border: 2px solid #ff9944;
+    background: transparent;
+    flex-shrink: 0;
+  }
 
-  /* ── Station note ────────────────────────────────────────────────────── */
+  svg.box-chart { width: 100%; overflow: visible; display: block; }
+
+  /* ── Station note ── */
   .station-note {
-    display: none;
     font-size: 0.68rem;
     color: #f0c040;
     background: rgba(240,192,64,0.08);
@@ -327,56 +234,39 @@
     margin-top: 1rem;
   }
 
-  /* ── Loading / error ─────────────────────────────────────────────────── */
-  .loading {
-    text-align: center;
-    padding: 4rem 2rem;
-    font-family: var(--font-head);
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
+  /* ── Stats strip ── */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
   }
 
-  .loading-dot {
-    display: inline-block;
-    animation: blink 1.2s step-start infinite;
-  }
+  .stat-cell { background: var(--card); padding: 0.9rem 1.2rem; text-align: center; cursor: pointer; transition: background 0.15s; }
+  .stat-cell:hover { background: rgba(0,174,239,0.08); }
+  .stat-cell.active { background: rgba(0,174,239,0.12); border-bottom: 2px solid var(--cyan); }
+  .stat-city  { font-family: var(--font-head); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; }
+  .stat-value { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .stat-anom  { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+  .pos { color: #ef5350; } .neg { color: #42a5f5; } .neu { color: var(--muted); }
+
+  /* ── Loading / error ── */
+  .loading { text-align: center; padding: 4rem 2rem; font-family: var(--font-head); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .loading-dot { display: inline-block; animation: blink 1.2s step-start infinite; }
   .loading-dot:nth-child(2) { animation-delay: 0.2s; }
   .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-  .error-msg {
-    background: rgba(239,83,80,0.1);
-    border: 1px solid rgba(239,83,80,0.3);
-    border-radius: 4px;
-    padding: 1rem 1.5rem;
-    font-size: 0.8rem;
-    color: #ef9090;
-    margin: 2rem 0;
-  }
+  .error-msg { background: rgba(239,83,80,0.1); border: 1px solid rgba(239,83,80,0.3); border-radius: 4px; padding: 1rem 1.5rem; font-size: 0.8rem; color: #ef9090; margin: 2rem 0; }
 
-  /* ── Legend ──────────────────────────────────────────────────────────── */
-  .legend {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.68rem;
-    color: var(--muted);
-    margin-top: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
-  .legend-box { width: 14px; height: 10px; border-radius: 2px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .legend-line { width: 20px; height: 2px; }
-
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     .controls-row { grid-template-columns: 1fr; }
-    .chart-grid { grid-template-columns: 1fr; }
-    .stats-strip { grid-template-columns: 1fr 1fr; }
+    .stats-strip  { grid-template-columns: 1fr 1fr; }
+    .city-tabs    { flex-wrap: wrap; }
   }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -416,17 +306,15 @@
             <input type="range" id="sliderStart" min="1996" max="2025" value="1996" step="1">
             <input type="range" id="sliderEnd"   min="1996" max="2025" value="2025" step="1">
           </div>
-          <div class="range-labels">
-            <span>1996</span><span>2025</span>
-          </div>
+          <div class="range-labels"><span>1996</span><span>2025</span></div>
         </div>
 
         <div class="control-group">
           <label>Variable</label>
           <div class="var-toggle">
-            <button class="var-btn active" data-var="tmax" onclick="setVar('tmax')">Tmax</button>
-            <button class="var-btn" data-var="tmean" onclick="setVar('tmean')">Tmean</button>
-            <button class="var-btn" data-var="tmin" onclick="setVar('tmin')">Tmin</button>
+            <button class="var-btn active" data-var="tmax"  onclick="setVar('tmax')">Tmax</button>
+            <button class="var-btn"        data-var="tmean" onclick="setVar('tmean')">Tmean</button>
+            <button class="var-btn"        data-var="tmin"  onclick="setVar('tmin')">Tmin</button>
           </div>
           <label class="prev-toggle">
             <input type="checkbox" id="showPrev" onchange="redraw()">
@@ -435,68 +323,41 @@
         </div>
 
         <div class="control-group">
-          <label>Window size</label>
+          <label>Window</label>
           <div style="font-family:var(--font-head);font-size:1.8rem;color:var(--cyan);letter-spacing:-0.02em" id="windowSize">30 yrs</div>
         </div>
       </div>
-
-      <div class="station-note" id="stationNote"></div>
     </div>
 
-    <!-- Stats strip -->
+    <!-- Stats strip (clickable — selects city) -->
     <div class="stats-strip" id="statsStrip"></div>
 
-    <!-- Charts -->
-    <div class="chart-grid" id="chartGrid"></div>
+    <!-- City tabs -->
+    <div class="city-tabs" id="cityTabs"></div>
 
-    <!-- Legend -->
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-box" style="background:rgba(0,174,239,0.25);border:1px solid rgba(0,174,239,0.4)"></div>
-        <span>IQR (25–75th pct)</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-line" style="background:var(--cyan);opacity:0.5"></div>
-        <span>Min–Max range</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-line" style="background:var(--white)"></div>
-        <span>Climo mean</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-dot" style="background:#ffcc00;box-shadow:0 0 4px #ffcc00"></div>
-        <span>Current forecast</span>
-      </div>
-      <div class="legend-item" id="prevLegend" style="display:none">
-        <div class="legend-dot" style="background:#ff9944;box-shadow:0 0 4px #ff9944;opacity:0.7"></div>
-        <span>Previous month forecast</span>
-      </div>
-    </div>
+    <!-- Single city chart -->
+    <div id="chartArea"></div>
 
   </div>
 </main>
 
 <script>
-// ── Config ─────────────────────────────────────────────────────────────────
-// UPDATE THESE URLS after uploading files to your GitHub repo
-// Format: https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/FILENAME
 const OBS_URL      = './obs_data.csv';
 const FORECAST_URL = './AusSeasonalTempPlusPrev.csv';
 
-const CITIES = ['Adelaide', 'Archerfield', 'Bankstown', 'Melbourne'];
-
+const CITIES      = ['Adelaide', 'Archerfield', 'Bankstown', 'Melbourne'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-// Station changeover years — used to warn user when window crosses these
 const STATION_CHANGES = {
-  Adelaide: { year: 2017, note: 'Adelaide: data before 2017 is from Kent Town station, 2017 onwards from West Terrace.' },
-  Melbourne: { year: 2013, note: 'Melbourne: data before 2013 is from Regional Office (CBD), 2013 onwards from Olympic Park.' },
+  Adelaide:  { year: 2017, note: 'Adelaide: data before 2017 is Kent Town station; 2017 onwards is West Terrace.' },
+  Melbourne: { year: 2013, note: 'Melbourne: data before 2013 is Regional Office (CBD); 2013 onwards is Olympic Park.' },
 };
 
 // ── State ──────────────────────────────────────────────────────────────────
-let obsData      = [];   // [{location, year, month, tmax, tmin, tmean}, ...]
-let forecastData = [];   // [{location, month_str, month_num, year, tmax, tmin, tmean, prev_tmax, prev_tmin, prev_tmean}, ...]
+let obsData      = [];
+let forecastData = [];
 let activeVar    = 'tmax';
+let activeCity   = 'Adelaide';
 let startYear    = 1996;
 let endYear      = 2025;
 
@@ -506,36 +367,27 @@ function parseCSV(text) {
   const headers = lines[0].split(',').map(h => h.trim());
   return lines.slice(1).filter(l => l.trim()).map(l => {
     const vals = l.split(',');
-    const obj = {};
+    const obj  = {};
     headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
     return obj;
   });
 }
 
-// ── Load data ──────────────────────────────────────────────────────────────
+// ── Load ───────────────────────────────────────────────────────────────────
 async function loadData() {
   try {
     const [obsText, fcText] = await Promise.all([
-      fetch(OBS_URL).then(r => { if (!r.ok) throw new Error(`obs_data.csv: ${r.status}`); return r.text(); }),
+      fetch(OBS_URL).then(r      => { if (!r.ok) throw new Error(`obs_data.csv: ${r.status}`); return r.text(); }),
       fetch(FORECAST_URL).then(r => { if (!r.ok) throw new Error(`AusSeasonalTempPlusPrev.csv: ${r.status}`); return r.text(); }),
     ]);
 
-    // Parse obs
-    const rawObs = parseCSV(obsText);
-    obsData = rawObs.map(r => ({
-      location: r.location,
-      year:     +r.year,
-      month:    +r.month,
-      tmax:     parseFloat(r.tmax),
-      tmin:     parseFloat(r.tmin),
-      tmean:    parseFloat(r.tmean),
+    obsData = parseCSV(obsText).map(r => ({
+      location: r.location, year: +r.year, month: +r.month,
+      tmax: parseFloat(r.tmax), tmin: parseFloat(r.tmin), tmean: parseFloat(r.tmean),
     }));
 
-    // Parse forecast
-    // Month column is like "June 2026"
-    const rawFc = parseCSV(fcText);
-    forecastData = rawFc.map(r => {
-      const parts = r.Month.split(' ');
+    forecastData = parseCSV(fcText).map(r => {
+      const parts    = r.Month.split(' ');
       const monthNum = MONTH_NAMES.indexOf(parts[0].slice(0,3)) + 1;
       return {
         location:   r.Location,
@@ -552,45 +404,52 @@ async function loadData() {
     });
 
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+    document.getElementById('app').style.display     = 'block';
+    buildCityTabs();
     initSliders();
     redraw();
 
   } catch(err) {
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').style.display   = 'block';
     document.getElementById('error').innerHTML =
       `<strong>Could not load data.</strong><br>${err.message}<br><br>` +
-      `Check that obs_data.csv and AusSeasonalTempPlusPrev.csv have been uploaded to the GitHub repo, ` +
-      `and that the URLs in this file are correct.`;
+      `Check that obs_data.csv and AusSeasonalTempPlusPrev.csv have been uploaded to the GitHub repo, and that the URLs are correct.`;
   }
+}
+
+// ── City tabs ──────────────────────────────────────────────────────────────
+function buildCityTabs() {
+  document.getElementById('cityTabs').innerHTML = CITIES.map(c =>
+    `<button class="city-tab${c === activeCity ? ' active' : ''}" onclick="setCity('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setCity(city) {
+  activeCity = city;
+  document.querySelectorAll('.city-tab').forEach(b => b.classList.toggle('active', b.textContent === city));
+  document.querySelectorAll('.stat-cell').forEach(b => b.classList.toggle('active', b.dataset.city === city));
+  drawChart();
 }
 
 // ── Sliders ────────────────────────────────────────────────────────────────
 function initSliders() {
-  const s = document.getElementById('sliderStart');
-  const e = document.getElementById('sliderEnd');
-  s.addEventListener('input', onSlider);
-  e.addEventListener('input', onSlider);
+  document.getElementById('sliderStart').addEventListener('input', onSlider);
+  document.getElementById('sliderEnd').addEventListener('input',   onSlider);
   updateFill();
 }
 
 function onSlider() {
   let s = +document.getElementById('sliderStart').value;
   let e = +document.getElementById('sliderEnd').value;
-  // Enforce minimum 1 year gap
   if (s >= e) {
-    if (this === document.getElementById('sliderStart')) s = e - 1;
-    else e = s + 1;
-    document.getElementById('sliderStart').value = s;
-    document.getElementById('sliderEnd').value = e;
+    if (this.id === 'sliderStart') { s = e - 1; document.getElementById('sliderStart').value = s; }
+    else                           { e = s + 1; document.getElementById('sliderEnd').value   = e; }
   }
-  startYear = s;
-  endYear   = e;
+  startYear = s; endYear = e;
   document.getElementById('rangeDisplay').textContent = `${s} – ${e}`;
   document.getElementById('windowSize').textContent   = `${e - s + 1} yr${e-s+1===1?'':'s'}`;
   updateFill();
-  checkStationNote();
   redraw();
 }
 
@@ -598,25 +457,11 @@ function updateFill() {
   const min = 1996, max = 2025, range = max - min;
   const s = +document.getElementById('sliderStart').value;
   const e = +document.getElementById('sliderEnd').value;
-  const fill = document.getElementById('rangeFill');
+  const fill  = document.getElementById('rangeFill');
   const left  = ((s - min) / range * 100).toFixed(1);
   const right = ((e - min) / range * 100).toFixed(1);
   fill.style.left  = left + '%';
   fill.style.width = (right - left) + '%';
-}
-
-function checkStationNote() {
-  const notes = [];
-  for (const [city, info] of Object.entries(STATION_CHANGES)) {
-    if (startYear < info.year && endYear >= info.year) notes.push(info.note);
-  }
-  const el = document.getElementById('stationNote');
-  if (notes.length) {
-    el.style.display = 'block';
-    el.innerHTML = '⚠ Station note — ' + notes.join(' | ');
-  } else {
-    el.style.display = 'none';
-  }
 }
 
 // ── Variable toggle ────────────────────────────────────────────────────────
@@ -626,7 +471,7 @@ function setVar(v) {
   redraw();
 }
 
-// ── Stats & charts ─────────────────────────────────────────────────────────
+// ── Stats ──────────────────────────────────────────────────────────────────
 function getClimoStats(location, monthNum) {
   const vals = obsData
     .filter(r => r.location === location && r.month === monthNum && r.year >= startYear && r.year <= endYear)
@@ -634,8 +479,8 @@ function getClimoStats(location, monthNum) {
     .filter(v => !isNaN(v))
     .sort((a,b) => a-b);
   if (!vals.length) return null;
-  const n = vals.length;
-  const mean = vals.reduce((a,b) => a+b,0) / n;
+  const n    = vals.length;
+  const mean = vals.reduce((a,b) => a+b, 0) / n;
   const q1   = vals[Math.floor(n * 0.25)];
   const q3   = vals[Math.floor(n * 0.75)];
   return { mean, min: vals[0], max: vals[n-1], q1, q3, n };
@@ -643,137 +488,176 @@ function getClimoStats(location, monthNum) {
 
 function redraw() {
   drawStats();
-  drawCharts();
-  document.getElementById('prevLegend').style.display =
-    document.getElementById('showPrev').checked ? 'flex' : 'none';
+  drawChart();
 }
 
 function drawStats() {
   const strip = document.getElementById('statsStrip');
-  // Use the first forecast month for the stats strip overview
   strip.innerHTML = CITIES.map(city => {
-    const fc = forecastData.find(r => r.location === city);
-    if (!fc) return `<div class="stat-cell"><div class="stat-city">${city}</div><div class="stat-value neu">—</div></div>`;
+    const fc    = forecastData.find(r => r.location === city);
+    if (!fc) return `<div class="stat-cell" data-city="${city}" onclick="setCity('${city}')"><div class="stat-city">${city}</div><div class="stat-value neu">—</div></div>`;
     const stats = getClimoStats(city, fc.month_num);
-    const val = fc[activeVar];
-    const anom = stats ? (val - stats.mean).toFixed(1) : null;
-    const cls  = anom > 0.5 ? 'pos' : anom < -0.5 ? 'neg' : 'neu';
-    const sign = anom > 0 ? '+' : '';
-    const varLabel = { tmax: 'Tmax', tmean: 'Tmean', tmin: 'Tmin' }[activeVar];
+    const val   = fc[activeVar];
+    const anom  = stats ? (val - stats.mean).toFixed(1) : null;
+    const cls   = anom > 0.5 ? 'pos' : anom < -0.5 ? 'neg' : 'neu';
+    const sign  = anom > 0 ? '+' : '';
+    const varLbl = { tmax:'Tmax', tmean:'Tmean', tmin:'Tmin' }[activeVar];
+    const isActive = city === activeCity;
     return `
-      <div class="stat-cell">
+      <div class="stat-cell${isActive?' active':''}" data-city="${city}" onclick="setCity('${city}')">
         <div class="stat-city">${city}</div>
         <div class="stat-value ${cls}">${val.toFixed(1)}°</div>
-        <div class="stat-anom">${fc.month_str} ${varLabel} ${anom!=null ? `<span class="${cls}">${sign}${anom} vs ${startYear}–${endYear}</span>` : ''}</div>
+        <div class="stat-anom">${fc.month_str.split(' ')[0]} ${varLbl}${anom!=null?` <span class="${cls}">${sign}${anom}</span>`:''}</div>
       </div>`;
   }).join('');
 }
 
-function drawCharts() {
-  const grid = document.getElementById('chartGrid');
-  grid.innerHTML = CITIES.map(city => {
-    const cityFc = forecastData.filter(r => r.location === city);
-    if (!cityFc.length) return '';
-    const showPrev = document.getElementById('showPrev').checked;
+// ── Chart ──────────────────────────────────────────────────────────────────
+function drawChart() {
+  const area    = document.getElementById('chartArea');
+  const city    = activeCity;
+  const cityFc  = forecastData.filter(r => r.location === city);
+  const showPrev = document.getElementById('showPrev').checked;
 
-    const W = 480, H = 200, PL = 38, PR = 10, PT = 16, PB = 28;
-    const cw = W - PL - PR;
-    const ch = H - PT - PB;
-    const n = cityFc.length;
+  if (!cityFc.length) { area.innerHTML = ''; return; }
 
-    // Collect all values to set y scale
-    let allVals = [];
-    cityFc.forEach(fc => {
-      const stats = getClimoStats(city, fc.month_num);
-      if (stats) allVals.push(stats.min, stats.max, stats.mean);
-      if (!isNaN(fc[activeVar])) allVals.push(fc[activeVar]);
-      if (showPrev) {
-        const pv = fc[`prev_${activeVar}`];
-        if (!isNaN(pv)) allVals.push(pv);
-      }
-    });
-    if (!allVals.length) return '';
+  // Station warning (only for Adelaide and Melbourne, only when window crosses changeover)
+  let stationHtml = '';
+  const sc = STATION_CHANGES[city];
+  if (sc && startYear < sc.year && endYear >= sc.year) {
+    stationHtml = `<div class="station-note">⚠ Station note — ${sc.note}</div>`;
+  }
 
-    const yMin = Math.min(...allVals) - 1;
-    const yMax = Math.max(...allVals) + 1;
-    const yScale = v => PT + ch - ((v - yMin) / (yMax - yMin)) * ch;
-    const xScale = i => PL + (i + 0.5) * (cw / n);
+  // Legend
+  const varColor  = { tmax:'#ef5350', tmean:'#00aeef', tmin:'#42a5f5' }[activeVar];
+  const varLabel  = { tmax:'Tmax', tmean:'Tmean', tmin:'Tmin' }[activeVar];
+  const prevItem  = showPrev
+    ? `<div class="legend-item"><div class="legend-diamond"></div><span>Prev month forecast</span></div>`
+    : '';
+  const legendHtml = `
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-box" style="background:${varColor}33;border:1px solid ${varColor}77"></div>
+        <span>IQR (25–75th pct)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:${varColor};opacity:0.4"></div>
+        <span>Min–Max range</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:var(--white)"></div>
+        <span>Climo mean</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#ffcc00;box-shadow:0 0 4px #ffcc00"></div>
+        <span>Current forecast</span>
+      </div>
+      ${prevItem}
+    </div>`;
 
-    const varColor = { tmax: '#ef5350', tmean: '#00aeef', tmin: '#42a5f5' }[activeVar];
+  // SVG dimensions — wider single chart
+  const W = 620, H = 260, PL = 44, PR = 16, PT = 16, PB = 32;
+  const cw = W - PL - PR;
+  const ch = H - PT - PB;
+  const n  = cityFc.length;
 
-    // Build SVG elements
-    let svgParts = [];
+  // Collect all values for y scale
+  let allVals = [];
+  cityFc.forEach(fc => {
+    const stats = getClimoStats(city, fc.month_num);
+    if (stats) allVals.push(stats.min, stats.max);
+    if (!isNaN(fc[activeVar])) allVals.push(fc[activeVar]);
+    // Always include prev values in scale even if toggle off, so axis doesn't jump
+    const pv = fc[`prev_${activeVar}`];
+    if (!isNaN(pv)) allVals.push(pv);
+  });
+  if (!allVals.length) { area.innerHTML = ''; return; }
 
-    // Y gridlines
-    const yTicks = 4;
-    for (let i = 0; i <= yTicks; i++) {
-      const v = yMin + (yMax - yMin) * i / yTicks;
-      const y = yScale(v);
-      svgParts.push(`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="rgba(122,155,181,0.15)" stroke-width="1"/>`);
-      svgParts.push(`<text x="${PL-4}" y="${y+4}" text-anchor="end" font-size="9" fill="#7a9bb5" font-family="DM Mono,monospace">${v.toFixed(0)}</text>`);
+  const yMin   = Math.min(...allVals) - 1.5;
+  const yMax   = Math.max(...allVals) + 1.5;
+  const yScale = v => PT + ch - ((v - yMin) / (yMax - yMin)) * ch;
+  const xScale = i => PL + (i + 0.5) * (cw / n);
+
+  let parts = [];
+
+  // Y gridlines
+  const yTicks = 5;
+  for (let i = 0; i <= yTicks; i++) {
+    const v = yMin + (yMax - yMin) * i / yTicks;
+    const y = yScale(v);
+    parts.push(`<line x1="${PL}" y1="${y.toFixed(1)}" x2="${W-PR}" y2="${y.toFixed(1)}" stroke="rgba(122,155,181,0.15)" stroke-width="1"/>`);
+    parts.push(`<text x="${PL-5}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="10" fill="#7a9bb5" font-family="DM Mono,monospace">${v.toFixed(0)}</text>`);
+  }
+
+  // Per forecast month
+  cityFc.forEach((fc, i) => {
+    const x  = xScale(i);
+    const bw = (cw / n) * 0.5;
+    const stats = getClimoStats(city, fc.month_num);
+
+    if (stats) {
+      // Min–max range line
+      parts.push(`<line x1="${x.toFixed(1)}" y1="${yScale(stats.min).toFixed(1)}" x2="${x.toFixed(1)}" y2="${yScale(stats.max).toFixed(1)}" stroke="${varColor}" stroke-width="2" stroke-opacity="0.3"/>`);
+      // Whisker caps
+      parts.push(`<line x1="${(x-bw*0.25).toFixed(1)}" y1="${yScale(stats.min).toFixed(1)}" x2="${(x+bw*0.25).toFixed(1)}" y2="${yScale(stats.min).toFixed(1)}" stroke="${varColor}" stroke-width="1.5" stroke-opacity="0.4"/>`);
+      parts.push(`<line x1="${(x-bw*0.25).toFixed(1)}" y1="${yScale(stats.max).toFixed(1)}" x2="${(x+bw*0.25).toFixed(1)}" y2="${yScale(stats.max).toFixed(1)}" stroke="${varColor}" stroke-width="1.5" stroke-opacity="0.4"/>`);
+      // IQR box
+      const yQ1 = yScale(stats.q1), yQ3 = yScale(stats.q3);
+      parts.push(`<rect x="${(x-bw/2).toFixed(1)}" y="${yQ3.toFixed(1)}" width="${bw.toFixed(1)}" height="${(yQ1-yQ3).toFixed(1)}" fill="${varColor}" fill-opacity="0.2" stroke="${varColor}" stroke-opacity="0.5" stroke-width="1" rx="1"/>`);
+      // Mean line
+      const yM = yScale(stats.mean);
+      parts.push(`<line x1="${(x-bw/2).toFixed(1)}" y1="${yM.toFixed(1)}" x2="${(x+bw/2).toFixed(1)}" y2="${yM.toFixed(1)}" stroke="rgba(240,244,248,0.9)" stroke-width="2"/>`);
     }
 
-    // Per forecast month
-    cityFc.forEach((fc, i) => {
-      const x = xScale(i);
-      const bw = (cw / n) * 0.55;
-      const stats = getClimoStats(city, fc.month_num);
+    const cv = fc[activeVar];
+    const pv = fc[`prev_${activeVar}`];
 
-      if (stats) {
-        // Range line (min–max)
-        const yMn = yScale(stats.min), yMx = yScale(stats.max);
-        svgParts.push(`<line x1="${x}" y1="${yMn}" x2="${x}" y2="${yMx}" stroke="${varColor}" stroke-width="1.5" stroke-opacity="0.3"/>`);
+    // Connecting line between prev and current (when both visible)
+    if (showPrev && !isNaN(pv) && !isNaN(cv)) {
+      parts.push(`<line x1="${x.toFixed(1)}" y1="${yScale(pv).toFixed(1)}" x2="${x.toFixed(1)}" y2="${yScale(cv).toFixed(1)}" stroke="#ff9944" stroke-width="1.5" stroke-dasharray="3,2" stroke-opacity="0.7"/>`);
+    }
 
-        // IQR box
-        const yQ1 = yScale(stats.q1), yQ3 = yScale(stats.q3);
-        svgParts.push(`<rect x="${x - bw/2}" y="${yQ3}" width="${bw}" height="${yQ1 - yQ3}" fill="${varColor}" fill-opacity="0.18" stroke="${varColor}" stroke-opacity="0.45" stroke-width="1" rx="1"/>`);
+    // Previous forecast — hollow diamond
+    if (showPrev && !isNaN(pv)) {
+      const yP = yScale(pv);
+      const ds = 7; // diamond half-size
+      parts.push(`<polygon points="${x},${yP-ds} ${x+ds},${yP} ${x},${yP+ds} ${x-ds},${yP}" fill="none" stroke="#ff9944" stroke-width="2"/>`);
+      // Value label for prev
+      parts.push(`<text x="${x.toFixed(1)}" y="${(yP+ds+11).toFixed(1)}" text-anchor="middle" font-size="9" fill="#ff9944" font-family="DM Mono,monospace">${pv.toFixed(1)}</text>`);
+    }
 
-        // Mean line
-        const yM = yScale(stats.mean);
-        svgParts.push(`<line x1="${x - bw/2}" y1="${yM}" x2="${x + bw/2}" y2="${yM}" stroke="rgba(240,244,248,0.85)" stroke-width="1.5"/>`);
-      }
+    // Current forecast — filled dot with glow + label above
+    if (!isNaN(cv)) {
+      const yC = yScale(cv);
+      parts.push(`<circle cx="${x.toFixed(1)}" cy="${yC.toFixed(1)}" r="6" fill="#ffcc00" filter="url(#glow)"/>`);
+      parts.push(`<text x="${x.toFixed(1)}" y="${(yC-11).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="600" fill="#ffcc00" font-family="DM Mono,monospace">${cv.toFixed(1)}</text>`);
+    }
 
-      // Previous forecast dot
-      if (showPrev) {
-        const pv = fc[`prev_${activeVar}`];
-        if (!isNaN(pv)) {
-          const yP = yScale(pv);
-          svgParts.push(`<circle cx="${x}" cy="${yP}" r="4.5" fill="#ff9944" fill-opacity="0.7" stroke="#ff9944" stroke-width="1"/>`);
-        }
-      }
+    // Month label
+    parts.push(`<text x="${x.toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="10" fill="#7a9bb5" font-family="DM Mono,monospace">${MONTH_NAMES[fc.month_num-1]}</text>`);
+  });
 
-      // Current forecast dot
-      const cv = fc[activeVar];
-      if (!isNaN(cv)) {
-        const yC = yScale(cv);
-        svgParts.push(`<circle cx="${x}" cy="${yC}" r="5.5" fill="#ffcc00" stroke="#ffcc00" stroke-width="1" filter="url(#glow)"/>`);
-        // Value label
-        svgParts.push(`<text x="${x}" y="${yC - 9}" text-anchor="middle" font-size="9.5" fill="#ffcc00" font-family="DM Mono,monospace" font-weight="500">${cv.toFixed(1)}</text>`);
-      }
-
-      // Month label
-      const mLabel = MONTH_NAMES[fc.month_num - 1];
-      svgParts.push(`<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="9" fill="#7a9bb5" font-family="DM Mono,monospace">${mLabel}</text>`);
-    });
-
-    return `
-      <div class="chart-card">
+  area.innerHTML = `
+    <div class="chart-card">
+      <div class="chart-header">
         <div class="chart-title">${city}</div>
-        <div class="chart-subtitle">${startYear}–${endYear} climatology vs current forecast</div>
-        <svg class="box-chart" viewBox="0 0 ${W} ${H}">
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2.5" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          ${svgParts.join('')}
-        </svg>
-      </div>`;
-  }).join('');
+        <div class="chart-subtitle">${varLabel} — ${startYear}–${endYear} climatology vs current forecast</div>
+      </div>
+      ${legendHtml}
+      <svg class="box-chart" viewBox="0 0 ${W} ${H}">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        ${parts.join('')}
+      </svg>
+      ${stationHtml}
+    </div>`;
 }
 
-// ── Init ────────────────────────────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────────────────────
 loadData();
 </script>
 </body>
